@@ -23,7 +23,7 @@ export class ClientController {
     @Inject(UsecasesProxyModule.GET_CLIENT_ALL_USECASE_PROXY)
     private readonly getAllTodoUsecaseProxy: UseCaseProxy<GetClientAllUseCases>,
     @Inject(UsecasesProxyModule.PUT_CLIENT_USECASE_PROXY)
-    private readonly updateTodoUsecaseProxy: UseCaseProxy<updateClientUseCases>,
+    private readonly updateToUseCaseProxy: UseCaseProxy<updateClientUseCases>,
     @Inject(UsecasesProxyModule.DELETE_CLIENT_USECASE_PROXY)
     private readonly deleteTodoUsecaseProxy: UseCaseProxy<deleteClientUseCases>,
     @Inject(UsecasesProxyModule.POST_CLIENT_USECASE_PROXY)
@@ -47,8 +47,8 @@ export class ClientController {
   @Put('put')
   @ApiResponseType(ClientPresenter, true)
   async updateClient(@Body() updateTodoDto: UpdateClientDto) {
-    const { id } = updateTodoDto;
-    await this.updateTodoUsecaseProxy.getInstance().execute(id);
+    const { id, name, salary, company_salary } = updateTodoDto;
+    await this.updateToUseCaseProxy.getInstance().execute(id, name, salary, company_salary);
     return 'success';
   }
 

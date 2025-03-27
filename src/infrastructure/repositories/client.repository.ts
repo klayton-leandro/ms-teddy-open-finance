@@ -12,10 +12,15 @@ export class ClientDatabaseRepository implements ClientRepository {
     private readonly clientRepository: Repository<ClientEntity>,
   ) { }
 
-  async update(id: number): Promise<void> {
+  async update(id: number, name: string, salary: number, company_salary: number): Promise<void> {
     await this.clientRepository.update(
       { id },
-      { updateddate: new Date() },
+      {
+        name,
+        salary,
+        company_salary,
+        updateddate: new Date()
+      },
     );
   }
 
