@@ -1,25 +1,25 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity()
-export class Client {
-  @PrimaryGeneratedColumn({ type: 'integer' })
+@Entity({ name: 'clients' })
+export class ClientEntity {
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 255, nullable: true })
+  @Column()
   name: string;
 
-  @Column('number', { default: 0 })
+  @Column({ type: 'decimal' })
   salary: number;
 
-  @Column('varchar', { length: 255, nullable: true })
+  @Column({ name: 'company_name' })
   company_name: string;
 
-  @Column('number', { default: 0 })
+  @Column({ name: 'company_salary', type: 'decimal' })
   company_salary: number;
 
-  @CreateDateColumn({ name: 'createdate' })
+  @Column({ name: 'createdate', type: 'timestamp' })
   createdate: Date;
 
-  @UpdateDateColumn({ name: 'updateddate' })
+  @Column({ name: 'updateddate', type: 'timestamp', nullable: true })
   updateddate: Date;
 }

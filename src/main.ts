@@ -3,7 +3,7 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-// import { AllExceptionFilter } from './infrastructure/common/filter/exception.filter';
+import { AllExceptionFilter } from './infrastructure/common/filter/exception.filter';
 import { LoggingInterceptor } from './infrastructure/common/interceptors/logger.interceptor';
 import { ResponseFormat, ResponseInterceptor } from './infrastructure/common/interceptors/response.interceptor';
 import { LoggerService } from './infrastructure/logger/logger.service';
@@ -12,10 +12,7 @@ async function bootstrap() {
   const env = process.env.NODE_ENV;
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
-  // Filter
-  // app.useGlobalFilters(new AllExceptionFilter(new LoggerService()));
-
-  // pipes
+  app.useGlobalFilters(new AllExceptionFilter(new LoggerService()));
   app.useGlobalPipes(new ValidationPipe());
 
   // interceptors
@@ -31,8 +28,8 @@ async function bootstrap() {
   if (env !== 'production') {
     const config = new DocumentBuilder()
       .addBearerAuth()
-      .setTitle('Teddy open finance')
-      .setDescription('Service Responsibily for Create Clients to Service')
+      .setTitle('Service Responsibily for Create Clients to Service')
+      .setDescription('Creating feature usecases providers with integration for client ')
       .setVersion('1')
       .build();
     const document = SwaggerModule.createDocument(app, config, {

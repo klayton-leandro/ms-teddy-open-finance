@@ -3,43 +3,44 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Client } from '../../domain/model/client';
 import { ClientRepository } from '../../domain/repositories/clientRepository.interface';
-import { Client as ClientEntity } from '../entities/client.entity';
+import { ClientEntity } from '../entities/client.entity';
 
 @Injectable()
 export class ClientDatabaseRepository implements ClientRepository {
   constructor(
     @InjectRepository(ClientEntity)
-    private readonly todoEntityRepository: Repository<ClientEntity>,
+    private readonly clientRepository: Repository<ClientEntity>,
   ) { }
 
   async updateContent(id: number): Promise<void> {
-    await this.todoEntityRepository.update(
-      {
-        id: id,
-      },
+    await this.clientRepository.update(
+      { id },
       { updateddate: new Date() },
     );
   }
-  async insert(todo: Client): Promise<Client> {
-    const todoEntity = this.toClientEntity(todo);
-    const result = await this.todoEntityRepository.insert(todoEntity);
-    return this.client(result.generatedMaps[0] as Client);
+
+  async insert(client: Client): Promise<Client> {
+    const clientEntity = this.toClientEntity(client);
+    const result = await this.clientRepository.insert(clientEntity);
+    return this.toDomain(result.generatedMaps[0] as ClientEntity);
   }
+
   async findAll(): Promise<Client[]> {
-    const todosEntity = await this.todoEntityRepository.find();
-    return todosEntity.map((todoEntity) => this.client(todoEntity));
+    const clients = await this.clientRepository.find();
+    return clients.map(this.toDomain);
   }
+
   async findById(id: number): Promise<Client> {
-    const todoEntity = await this.todoEntityRepository.findOneOrFail({ where: { id } });
-    return this.client(todoEntity);
+    const client = await this.clientRepository.findOneOrFail({ where: { id } });
+    return this.toDomain(client);
   }
+
   async deleteById(id: number): Promise<void> {
-    await this.todoEntityRepository.delete({ id: id });
+    await this.clientRepository.delete({ id });
   }
 
-  private client(clientEntity: ClientEntity): Client {
-    const client: Client = new Client();
-
+  private toDomain(clientEntity: ClientEntity): Client {
+    const client = new Client();
     client.id = clientEntity.id;
     client.name = clientEntity.name;
     client.salary = clientEntity.salary;
@@ -47,21 +48,17 @@ export class ClientDatabaseRepository implements ClientRepository {
     client.company_salary = clientEntity.company_salary;
     client.createdate = clientEntity.createdate;
     client.updateddate = clientEntity.updateddate;
-
     return client;
   }
 
-  private toClientEntity(client: Client): Client {
-    const clientEntity: Client = new Client();
-
-    client.id = client.id;
-    client.name = client.name;
-    client.salary = client.salary;
-    client.company_name = client.company_name;
-    client.company_salary = client.company_salary;
-    client.createdate = client.createdate;
-    client.updateddate = client.updateddate;
-
+  private toClientEntity(client: Client): ClientEntity {
+    const clientEntity = new ClientEntity();
+    clientEntity.name = client.name;
+    clientEntity.salary = client.salary;
+    clientEntity.company_name = client.company_name;
+    clientEntity.company_salary = client.company_salary;
+    clientEntity.createdate = client.createdate;
+    clientEntity.updateddate = client.updateddate;
     return clientEntity;
   }
 }
