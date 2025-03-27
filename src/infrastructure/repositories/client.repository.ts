@@ -12,7 +12,7 @@ export class ClientDatabaseRepository implements ClientRepository {
     private readonly clientRepository: Repository<ClientEntity>,
   ) { }
 
-  async updateContent(id: number): Promise<void> {
+  async update(id: number): Promise<void> {
     await this.clientRepository.update(
       { id },
       { updateddate: new Date() },
@@ -20,26 +20,26 @@ export class ClientDatabaseRepository implements ClientRepository {
   }
 
   async insert(client: Client): Promise<Client> {
-    const clientEntity = this.toClientEntity(client);
+    const clientEntity = this.entity(client);
     const result = await this.clientRepository.insert(clientEntity);
-    return this.toDomain(result.generatedMaps[0] as ClientEntity);
+    return this.execute(result.generatedMaps[0] as ClientEntity);
   }
 
   async findAll(): Promise<Client[]> {
     const clients = await this.clientRepository.find();
-    return clients.map(this.toDomain);
+    return clients.map(this.execute);
   }
 
   async findById(id: number): Promise<Client> {
     const client = await this.clientRepository.findOneOrFail({ where: { id } });
-    return this.toDomain(client);
+    return this.execute(client);
   }
 
   async deleteById(id: number): Promise<void> {
     await this.clientRepository.delete({ id });
   }
 
-  private toDomain(clientEntity: ClientEntity): Client {
+  private execute(clientEntity: ClientEntity): Client {
     const client = new Client();
     client.id = clientEntity.id;
     client.name = clientEntity.name;
@@ -51,7 +51,7 @@ export class ClientDatabaseRepository implements ClientRepository {
     return client;
   }
 
-  private toClientEntity(client: Client): ClientEntity {
+  private entity(client: Client): ClientEntity {
     const clientEntity = new ClientEntity();
     clientEntity.name = client.name;
     clientEntity.salary = client.salary;

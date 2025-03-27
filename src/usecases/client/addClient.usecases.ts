@@ -15,6 +15,8 @@ export class addClientUseCases {
     client.salary = salary
     client.company_name = company_name
     client.company_salary = company_salary
+    client.createdate = new Date()
+    client.updateddate = new Date()
     const result = await this.clientRepository.insert(client);
     this.logger.log('addTodoUseCases execute', 'New Client have been inserted');
     return result;
