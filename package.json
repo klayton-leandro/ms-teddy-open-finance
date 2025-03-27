@@ -1,8 +1,8 @@
 {
-  "name": "nest-typescript-starter",
+  "name": "teddy-open-service-client",
   "private": true,
   "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
+  "description": "API for CRUD interactions, client services, and Teddy Open Finance",
   "license": "MIT",
   "scripts": {
     "build": "nest build",
