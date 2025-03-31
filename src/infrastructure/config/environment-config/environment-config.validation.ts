@@ -9,8 +9,8 @@ enum Environment {
 }
 
 class EnvironmentVariables {
-  @IsEnum(Environment)
-  NODE_ENV: Environment;
+  // @IsEnum(Environment)
+  // NODE_ENV: Environment;
 
   @IsString()
   JWT_SECRET: string;

@@ -12,6 +12,7 @@ import { typeOrmConfig } from './infrastructure/config/typeorm/typeorm.config';
 
 @Module({
   imports: [
+    EnvironmentConfigModule,
     TypeOrmModule.forRoot(typeOrmConfig),
     RepositoriesModule,
     PassportModule,
@@ -20,7 +21,6 @@ import { typeOrmConfig } from './infrastructure/config/typeorm/typeorm.config';
     UsecasesProxyModule.register(),
     ControllersModule,
     BcryptModule,
-    EnvironmentConfigModule,
   ],
   providers: [],
 })
